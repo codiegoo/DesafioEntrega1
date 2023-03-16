@@ -3,27 +3,42 @@ const fs = require('fs')
 class CartManager{
   constructor(path){
     this.path = path
+    this.pathProducts = './data/Productos.json'
+  }
+
+
+  readJsonFile(filePath){
+    try {
+      const data = fs.readFileSync(filePath)
+      return JSON.parse(data)
+    } catch (error) {
+      throw new Error(`error al leer el archivo`)
+    }
   }
 
   createCart(){
-    const data = fs.readFileSync(this.path)
-    const carts = JSON.parse(data)
+    const carts = this.readJsonFile(this.path)
 
-    const id = carts.length + 1
+    let maxId = 0;
+    for (const cart of carts) {
+        if (cart.id > maxId) {
+            maxId = cart.id;
+        }
+    }
 
     const newCart = {
-      "id":id,
+      "id": maxId + 1,
       "productos":[]
     }
 
     carts.push(newCart)
     fs.writeFileSync(this.path, JSON.stringify(carts, null, 2))
 
-    console.log(`carrito ${id} creado`)
+    console.log(`carrito ${maxId + 1} creado`)
   }
 
   getCart(id){
-    const cartsData = fs.readFileSync('./data/Carts.json')
+    const cartsData = fs.readFileSync(this.path)
     const carts = JSON.parse(cartsData)
 
     const cart = carts.find(c => c.id === id)
@@ -32,7 +47,7 @@ class CartManager{
 
 
   addProductToCart(cid, pid){
-    const data = fs.readFileSync('./data/Productos.json')
+    const data = fs.readFileSync(this.pathProducts)
     const products = JSON.parse(data)
     const product = products.find(p => p.id === pid)
 
@@ -41,7 +56,7 @@ class CartManager{
       return
     }
 
-    const cartsData = fs.readFileSync('./data/Carts.json')
+    const cartsData = fs.readFileSync(this.path)
     const carts = JSON.parse(cartsData)
 
     const cart = carts.find(c => c.id === cid)
@@ -62,7 +77,7 @@ class CartManager{
     }
 
 
-    fs.writeFileSync('./data/Carts.json', JSON.stringify(carts))
+    fs.writeFileSync(this.path, JSON.stringify(carts))
 
     console.log(`el producto ${pid} se añadio al carrito ${cid} con exito`)
   }

@@ -43,13 +43,14 @@ class ProducManager{
     newProduct["id"] = id
     products.push(newProduct)
 
-      try {
-        //no estoy utilizando appendFileSync por que agregaria el objeto al final del archivo pórfuera del array de productos creando un error de sintaxis en el json de los porductos
-        fs.writeFileSync(this.path, JSON.stringify(products, null, 2))
-        console.log(`producto ${id} agregado`)
-      } catch (error) {
-        console.error('error aal escribir el archivo', error)
-      }
+    try {
+      //no estoy utilizando appendFileSync por que agregaria el objeto al final del archivo pórfuera del array de productos creando un error de sintaxis en el json de los porductos
+      fs.writeFileSync(this.path, JSON.stringify(products, null, 2))
+      console.log(`producto ${id} agregado`)
+    } catch (error) {
+      console.error('error al escribir el archivo',error)
+      throw new Error(`no se pudo agregar el producto ${id}`)
+    }
   }
 
 
@@ -60,16 +61,14 @@ class ProducManager{
     try {
       const productos = JSON.parse(fs.readFileSync(this.path, 'utf-8'))
       if(limit){
-
         console.log(productos.slice(0, limit))
         return productos.slice(0, limit)
-
       }else{
-        console.log(productos)
         return productos
       }
     }catch(error){
-      console.error("error al cargar los productos", error)
+      console.error(error)
+      throw new Error(`error al cargar los productos`)
     }
   }
 
@@ -83,7 +82,8 @@ class ProducManager{
       console.log(productoId)
       return productoId
     }catch(error){
-      console.error("error al cargar tu producto", error)
+      console.error(error)
+      throw new Error(`error al cargar el producto ${id} verifica que exista`)
     }
   }
 
@@ -111,7 +111,8 @@ class ProducManager{
       console.log(`producto ${id} actualizado`);
 
     } catch (error) {
-      console.error('error al actualizar el producto', error)
+      console.error(error)
+      throw new Error(`error al actualizar tu producto ${id}, verifica que tus valores a actualizar sean validos`)
     }
   }
 
@@ -131,6 +132,7 @@ class ProducManager{
       }
     } catch (error) {
       console.error(error)
+      throw new Error(`error al eliminar el producto ${id}`)
     }
   }
 
@@ -142,7 +144,8 @@ class ProducManager{
       fs.unlinkSync(this.path)
       console.log("todos los productos se han eliminado con exito")
     } catch (error) {
-      console.error("error al eliminar los productos")
+      console.error(error)
+      throw new Error(`error al eliminar los productos`)
     }
   }
 }
