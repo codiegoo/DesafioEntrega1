@@ -6,16 +6,17 @@ class CartManager{
     this.pathProducts = './data/Productos.json'
   }
 
-
+  //metodo que lee un archivo JSON
   readJsonFile(filePath){
     try {
       const data = fs.readFileSync(filePath)
       return JSON.parse(data)
     } catch (error) {
-      throw new Error(`error al leer el archivo`)
+      throw new Error(`error al leer el archivo: ${error.message}`)
     }
   }
 
+  //metodo que crea un carrito
   createCart(){
     const carts = this.readJsonFile(this.path)
 
@@ -25,61 +26,60 @@ class CartManager{
             maxId = cart.id;
         }
     }
-
     const newCart = {
       "id": maxId + 1,
       "productos":[]
     }
-
     carts.push(newCart)
     fs.writeFileSync(this.path, JSON.stringify(carts, null, 2))
-
     console.log(`carrito ${maxId + 1} creado`)
   }
 
+  //muestra un carrito segun su id
   getCart(id){
-    const cartsData = fs.readFileSync(this.path)
-    const carts = JSON.parse(cartsData)
-
-    const cart = carts.find(c => c.id === id)
-    return cart
+    const carts = this.readJsonFile(this.path)
+    try {
+      const cart = carts.find(c => c.id === id)
+      return cart
+    } catch (error) {
+      throw new Error(`error al cargar el carrito ${id}: ${error.message}`)
+    }
   }
 
 
+  //agrega un producto a un carrito en especifico
   addProductToCart(cid, pid){
-    const data = fs.readFileSync(this.pathProducts)
-    const products = JSON.parse(data)
+    //lee el archivo de productos y verifica que exista
+    const products = this.readJsonFile(this.pathProducts)
     const product = products.find(p => p.id === pid)
-
-    if(!product){
-      console.log(`el producto ${pid} no existe`)
-      return
-    }
-
-    const cartsData = fs.readFileSync(this.path)
-    const carts = JSON.parse(cartsData)
-
+    //lee el archivo de carritos y verifica que exista
+    const carts = this.readJsonFile(this.path)
     const cart = carts.find(c => c.id === cid)
-    if(!cart){
-      console.log(`el carrito ${cid} no existe`)
-      return
-    }
-
+    //busca la propiedad productos del carrito y verifica si este ya existe dentro
     const cartProductIndex = cart.productos.findIndex(p => p.product === pid)
 
-    if(cartProductIndex !== -1){
-      cart.productos[cartProductIndex].quantity++
-    }else{
-      cart.productos.push({
-        product: pid,
-        quantity: 1
-      })
+    try {
+      if(!product){
+        console.error(`el producto ${pid} no existe`)
+        return
+      }
+      if(!cart){
+        console.error(`el carrito ${cid} no existe`)
+        return
+      }
+      if(cartProductIndex !== -1){
+        cart.productos[cartProductIndex].quantity++
+      }else{
+        cart.productos.push({
+          product: pid,
+          quantity: 1
+        })
+      }
+      fs.writeFileSync(this.path, JSON.stringify(carts))
+      console.log(`el producto ${pid} se añadio al carrito ${cid} con exito`)
+    } catch (error) {
+      throw new Error(`Error al agregar el producto: ${error.message}`)
     }
-
-
-    fs.writeFileSync(this.path, JSON.stringify(carts))
-
-    console.log(`el producto ${pid} se añadio al carrito ${cid} con exito`)
   }
 }
 

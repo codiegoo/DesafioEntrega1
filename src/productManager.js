@@ -26,6 +26,8 @@ class ProducManager{
       price: Joi.number().min(0).required(),
       img: Joi.string().optional(),
       code: Joi.string().required(),
+      category: Joi.string().required(),
+      status: Joi.boolean().required(),
       stock: Joi.number().min(0).required(),
     })
     const {error} = schema.validate(product)

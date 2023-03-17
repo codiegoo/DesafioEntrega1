@@ -6,7 +6,11 @@
     "price": 3127,
     "stock": 1,
     "code": "76420-780",
-    "img": ["http://dummyimage.com/152x100.png/cc0000/ffffff"]
+    "category": "comida",
+    "status": true,
+    "img": [
+      "http://dummyimage.com/152x100.png/cc0000/ffffff"
+    ]
   },
   {
     "id": 2,
@@ -15,7 +19,11 @@
     "price": 426,
     "stock": 2,
     "code": "0591-2368",
-    "img": ["http://dummyimage.com/104x100.png/ff4444/ffffff"]
+    "category": "limpieza",
+    "status": true,
+    "img": [
+      "http://dummyimage.com/104x100.png/ff4444/ffffff"
+    ]
   },
   {
     "id": 3,
@@ -24,7 +32,11 @@
     "price": 4628,
     "stock": 3,
     "code": "68016-527",
-    "img": ["http://dummyimage.com/178x100.png/5fa2dd/ffffff"]
+    "category": "limpieza",
+    "status": true,
+    "img": [
+      "http://dummyimage.com/178x100.png/5fa2dd/ffffff"
+    ]
   },
   {
     "id": 4,
@@ -33,7 +45,11 @@
     "price": 385,
     "stock": 4,
     "code": "48951-3016",
-    "img": ["http://dummyimage.com/197x100.png/ff4444/ffffff"]
+    "category": "alcohol",
+    "status": false,
+    "img": [
+      "http://dummyimage.com/197x100.png/ff4444/ffffff"
+    ]
   },
   {
     "id": 5,
@@ -42,7 +58,11 @@
     "price": 1559,
     "stock": 8,
     "code": "64720-150",
-    "img": ["http://dummyimage.com/105x100.png/5fa2dd/ffffff"]
+    "category": "alcohol",
+    "status": true,
+    "img": [
+      "http://dummyimage.com/105x100.png/5fa2dd/ffffff"
+    ]
   },
   {
     "id": 6,
@@ -51,7 +71,11 @@
     "price": 591,
     "stock": 6,
     "code": "41520-626",
-    "img": ["http://dummyimage.com/195x100.png/5fa2dd/ffffff"]
+    "category": "limpieza",
+    "status": true,
+    "img": [
+      "http://dummyimage.com/195x100.png/5fa2dd/ffffff"
+    ]
   },
   {
     "id": 7,
@@ -60,16 +84,24 @@
     "price": 200,
     "stock": 7,
     "code": "11673-350",
-    "img": ["http://dummyimage.com/164x100.png/ff4444/ffffff"]
+    "category": "comida",
+    "status": true,
+    "img": [
+      "http://dummyimage.com/164x100.png/ff4444/ffffff"
+    ]
   },
   {
     "id": 8,
-    "nombre": "Wine - Tribal Sauvignon",
+    "nombre": "sopa maruchan 54g",
     "descripcion": "Immersion foot, unspecified foot, subsequent encounter",
     "price": 1559,
     "stock": 8,
     "code": "64720-150",
-    "img": ["http://dummyimage.com/105x100.png/5fa2dd/ffffff"]
+    "category": "comida",
+    "status": true,
+    "img": [
+      "http://dummyimage.com/105x100.png/5fa2dd/ffffff"
+    ]
   },
   {
     "id": 9,
@@ -78,7 +110,11 @@
     "price": 4755,
     "stock": 9,
     "code": "49738-913",
-    "img": ["http://dummyimage.com/250x100.png/dddddd/000000"]
+    "category": "limpieza",
+    "status": true,
+    "img": [
+      "http://dummyimage.com/250x100.png/dddddd/000000"
+    ]
   },
   {
     "id": 10,
@@ -87,6 +123,21 @@
     "price": 4755,
     "stock": 9,
     "code": "49738-913",
-    "img": ["http://dummyimage.com/250x100.png/dddddd/000000"]
+    "category": "limpieza",
+    "status": true,
+    "img": [
+      "http://dummyimage.com/250x100.png/dddddd/000000"
+    ]
+  },
+  {
+    "nombre": "tabelt ipad mini",
+    "descripcion": "ipad mini apple 256gb grey color",
+    "price": "15000",
+    "stock": "12",
+    "code": "12423534",
+    "category": "dispositivos",
+    "status": true,
+    "img": "http://dummyimage.com/115x100.png/cc0011/ffffff",
+    "id": 11
   }
 ]

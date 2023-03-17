@@ -21,8 +21,8 @@ router.post('/', (req, res) => {
 router.get('/', (req, res) => {
   const productsLim = parseInt(req.query.limit)
   try {
-    productManager.getProducts(productsLim)
-    res.status(200).send({message:`peticion de productos exitosa`})
+    const productos = productManager.getProducts(productsLim)
+    res.status(200).send({message: productos})
   } catch (error) {
     console.error(error)
     res.status(500).send({error:`error al cargar los productos`})
@@ -33,8 +33,8 @@ router.get('/', (req, res) => {
 router.get('/:pid', (req, res) => {
   const productId = parseInt(req.params.pid)
   try {
-    productManager.getProductById(productId)
-    res.status(200).send({message: `producto ${productId} cargado con exito!`})
+    const product = productManager.getProductById(productId)
+    res.status(200).send({message: product})
   } catch (error) {
     console.error(error)
     res.status(404).send({message: `producto ${productId} no encontrado`})
@@ -46,8 +46,8 @@ router.patch('/:pid', (req, res) => {
   const productId = parseInt(req.params.pid)
   const updates = req.body
   try {
-    productManager.updateProduct(productId, updates)
-    res.status(200).send({message: `producto ${productId} actualizado`})
+    const updateProduct = productManager.updateProduct(productId, updates)
+    res.status(200).send({message: updateProduct})
   } catch (error) {
     console.error(error)
     res.status(400).send({message: `error al actualizar ru producto, verifica los valores enviados por body`})
