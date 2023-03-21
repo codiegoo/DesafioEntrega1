@@ -19,26 +19,25 @@ router.post('/', (req, res) => {
 
   console.log(nombre, price, descripcion, stock, code, category, img, status)
 
-  // const product = {
-  //   "nombre":nombre,
-  //   "descripcion":descripcion,
-  //   "price":price,
-  //   "stock":stock,
-  //   "code":code,
-  //   "category":category,
-  //   "status":status,
-  //   "img":img
-  // }
-  // console.log(product)
-  // try {
-  //   productManager.addProduct(product)
-  //   res.status(201).send({message: 'producto creado'})
-
-  //   io.emit('productos', productManager.getProducts())
-  // } catch (error) {
-  //   console.error(error)
-  //   res.status(400).send({error:`error al crear el producto, verifica que sea un objeto y cuente con las claves y valores correctos`})
-  // }
+  const product = {
+    "nombre":nombre,
+    "descripcion":descripcion,
+    "price":price,
+    "stock":stock,
+    "code":code,
+    "category":category,
+    "status":status,
+    "img":img
+  }
+  console.log(product)
+  try {
+    productManager.addProduct(product)
+    io.emit('productos', productManager.getProducts())
+    res.status(201).redirect('back')
+  } catch (error) {
+    console.error(error)
+    res.status(400).send({error:`error al crear el producto, verifica que sea un objeto y cuente con las claves y valores correctos`})
+  }
 })
 
 // Muestra todos los productos existentes en el dom con handlebars
@@ -112,4 +111,3 @@ router.delete('/:pid', (req, res) => {
 
 return router
 }
-
