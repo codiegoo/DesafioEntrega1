@@ -1,5 +1,6 @@
 <h2>Productos</h2>
 <div class="product-list">
+  {{!-- Funcion que itera el array de productos y renderiza una seccion de plantilla por cada producto--}}
   {{#each productos}}
     <div class="productItem">
       <h3>{{this.nombre}}</h3>
@@ -10,34 +11,54 @@
   {{/each}}
 </div>
 
-<form method="POST" action="/api/products">
-  <input type="text" name="nombre" placeholder="Nombre del producto" />
-  <input type="number" name="price" placeholder="Precio del producto" />
-  <input type="text" name="descripcion" placeholder="Descripcion del producto" />
-  <input type="number" name="stock" placeholder="Stock del producto" />
-  <input type="number" name="code" placeholder="Codigo del producto" />
-  <input type="text" name="category" placeholder="Categoria del producto" />
-  <input type="checkbox" name="status" placeholder="Status del producto" />
-  <input type="text" name="img" placeholder="Imagen del producto" />
-  <button type="submit">Agregar producto</button>
-</form>
+<div class="formsContainer">
+
+  {{!-- formulario para crear un producto --}}
+  <form method="POST" action="/api/products">
+    <input type="text" name="nombre" placeholder="Nombre del producto:" />
+    <input type="number" name="price" placeholder="Precio del producto:" />
+    <input type="text" name="descripcion" placeholder="Descripcion del producto:" />
+    <input type="number" name="stock" placeholder="Stock del producto:" />
+    <input type="number" name="code" placeholder="Codigo del producto:" />
+    <input type="text" name="category" placeholder="Categoria del producto:" />
+    <input type="text" name="img" placeholder="Ruta de la imagen:" />
+    <p>Producto disponible:<input type="checkbox" name="status" placeholder="Status del producto:"></p>
+    <button type="submit">Agregar producto</button>
+  </form>
+
+
+{{!-- formulario para eliminar un producto --}}
+  <form method="POST" action="/api/products/{{productId}}?_method=DELETE" class="deleteForm">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="number" name="id" placeholder="Id del producto:">
+    <button type="submit">Eliminar producto</button>
+  </form>
+</div>
+
 
 <script src="/socket.io/socket.io.js"></script>
+
+{{!-- Escript que escucha el evento 'productos' y actualiza la lista de productos del dom --}}
 <script>
   var socket = io();
   socket.on('productos', function(data){
     // Actualizar la lista de productos con los datos recibidos
     var productList = document.querySelector('.product-list');
+    //Elimina toda la lista
     productList.innerHTML = '';
+    //Recorre la lista deproductos
     data.forEach(function(product){
+      //crea un div con la clase productItem
       var productItem = document.createElement('div');
       productItem.classList.add('productItem');
+      //inserta en el div propiedades de cada objeto product
       productItem.innerHTML = `
         <h3>${product.nombre}</h3>
         <img src="${product.img}" alt="">
         <p>${product.descripcion}</p>
         <p>$${product.price}</p>
       `;
+      //agrega el productItem a la lista productList actualizando asi la lista de productos
       productList.appendChild(productItem);
     });
   });

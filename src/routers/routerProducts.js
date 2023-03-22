@@ -1,8 +1,9 @@
 const { Router } = require('express')
-const { string } = require('joi')
 const productManager = require('../productManager')
 const router = Router()
 
+
+const methodOverride = require('method-override')
 
 
 
@@ -11,25 +12,39 @@ const router = Router()
  */
 
 module.exports = (io) => {
+
+  router.use(methodOverride('_method'))
+
+  //eliminar producto en tiempo real desde el body
+router.delete('/', (req, res) => {
+  const productId = req.body.id
+  try {
+    productManager.deleteProduct(parseInt(productId))
+    res.status(200).redirect('back')
+    io.emit('productos', productManager.getProducts())
+  } catch (error) {
+    console.error(error)
+    res.status(500).send({error: `Error al eliminar el producto con id ${productId}`})
+  }
+})
+
   // Permite crar un producto desde el body, siempre y cuando sea un objeto con todas sus propiedaddes adecuadas
 router.post('/', (req, res) => {
 
   const {nombre, price, descripcion, stock, code, category, img} = req.body
   const status = req.body.status === 'on'
 
-  console.log(nombre, price, descripcion, stock, code, category, img, status)
-
   const product = {
     "nombre":nombre,
     "descripcion":descripcion,
-    "price":price,
-    "stock":stock,
+    "price":parseInt(price),
+    "stock":parseInt(stock),
     "code":code,
     "category":category,
     "status":status,
     "img":img
   }
-  console.log(product)
+
   try {
     productManager.addProduct(product)
     io.emit('productos', productManager.getProducts())
@@ -42,10 +57,10 @@ router.post('/', (req, res) => {
 
 // Muestra todos los productos existentes en el dom con handlebars
 router.get('/', (req, res) => {
-  const productsLim = parseInt(req.query.limit)
+  const limite = parseInt(req.query.limit)
   try {
-    const productos = productManager.getProducts(productsLim)
-    res.status(200).render('home.handlebars', {productos: productos})
+    const productos = productManager.getProducts(limite)
+    res.status(200).render('home.handlebars', { productos })
   } catch (error) {
     console.error(error)
     res.status(500).send({error:`error al cargar los productos`})
@@ -60,8 +75,7 @@ router.get('/realTimeProducts', (req, res) => {
     const productos = productManager.getProducts(productsLimite)
     // Envía los productos a los clientes conectados
     io.emit('productos', productos)
-
-    res.status(200).render('realTimeProducts.handlebars', {productos: productos})
+    res.status(200).render('realTimeProducts.handlebars', {productos})
   } catch (error) {
     console.error(error)
     res.status(500).send({error:`error al cargar los productos`})
@@ -74,7 +88,7 @@ router.get('/:pid', (req, res) => {
   const productId = parseInt(req.params.pid)
   try {
     const product = productManager.getProductById(productId)
-    res.status(200).send({product: product})
+    res.status(200).send({ product})
   } catch (error) {
     console.error(error)
     res.status(404).send({message: `producto ${productId} no encontrado`})
@@ -87,25 +101,11 @@ router.patch('/:pid', (req, res) => {
   const updates = req.body
   try {
     const updateProduct = productManager.updateProduct(productId, updates)
-    res.status(200).send({updateProduct: updateProduct})
     io.emit('productos', productManager.getProducts())
+    res.status(200).send({updateProduct})
   } catch (error) {
     console.error(error)
     res.status(400).send({message: `error al actualizar ru producto, verifica los valores enviados por body`})
-  }
-})
-
-
-// Eliminar un producto específico
-router.delete('/:pid', (req, res) => {
-  const productId = parseInt(req.params.pid)
-  try {
-    productManager.deleteProduct(productId)
-    res.status(200).send({message: `Producto con id ${productId} ha sido eliminado`})
-    io.emit('productos', productManager.getProducts())
-  } catch (error) {
-    console.error(error)
-    res.status(500).send({error: `Error al eliminar el producto con id ${productId}`})
   }
 })
 
