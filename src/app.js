@@ -38,7 +38,7 @@ io.on('connection', (socket) => {
   })
 })
 
-const puerto = 5550
+const puerto = 8080
 http.listen(puerto, ()=>{
   console.log(`server running at port ${puerto}`)
 })
